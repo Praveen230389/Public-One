@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Project 2 - Jenkins Demo</title>
-</head>
-<body>
-    <h1>Welcome to Project 2</h1>
-    <p>This file is from the second GitHub repo. Jenkins should pull this too!</p>
-</body>
-</html>
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "<h1>Welcome to Project 2</h1><p>This is served by Flask & Jenkins!</p>"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
