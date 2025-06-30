@@ -1,10 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Simple Website</title>
+  <meta charset="UTF-8" />
+  <title>🎉 Congratulations! 🎉</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+      font-family: 'Arial', sans-serif;
+      color: #333;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      font-size: 3em;
+      color: #fff;
+      text-shadow: 2px 2px #000;
+    }
+    p {
+      font-size: 1.2em;
+      color: #f0f0f0;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    .box {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      display: inline-block;
+    }
+    .highlight {
+      font-weight: bold;
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome to My DevOps Static Website!</h1>
-  <p>This page is served by Apache and deployed with Ansible.</p>
+  <div class="box">
+    <h1>🎉 Congratulations! 🎉</h1>
+    <p>Hey there, <span class="highlight">Champion!</span></p>
+    <p>You have successfully completed your first <span class="highlight">Git ➜ Jenkins ➜ Ansible ➜ Apache</span> deployment pipeline!</p>
+    <p>This beautiful page is served via your own automated CI/CD setup. Great job for not giving up and seeing this through to success!</p>
+    <p>🚀 Keep building, keep learning, and keep celebrating these wins! 🚀</p>
+  </div>
 </body>
 </html>
