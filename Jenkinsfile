@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git branch: 'main' credentialsId: 'github-pat', url: 'https://github.com/Praveen230389/Public-One.git'
+        git branch: 'main', credentialsId: 'github-pat', url: 'https://github.com/Praveen230389/Public-One.git'
       }
     }
 
@@ -28,7 +28,6 @@ pipeline {
     stage('Generate Inventory') {
       steps {
         sh '''
-          # Capture the public IP of the new EC2 into inventory.ini
           terraform output -raw aws_instance_web_public_ip > inventory.ini
           echo "[web]" > hosts.ini
           echo $(terraform output -raw aws_instance_web_public_ip) >> hosts.ini
