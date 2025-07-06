@@ -102,4 +102,17 @@ resource "aws_instance" "web" {
   provisioner "remote-exec" {
     inline = ["sudo yum update -y"]
   }
+
+ provisioner "remote-exec" {
+    inline = [
+      "sudo yum update -y"
+    ]
+
+    connection {
+      type        = "ssh"
+      user        = "ec2-user"              # Amazon Linux 2 default user
+      private_key = file("~/.ssh/GlobalSSHkey.pem")
+      host        = self.public_ip
+    }
+  }
 }
