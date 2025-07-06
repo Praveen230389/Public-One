@@ -1,2 +1,0 @@
-[webservers]
-172.30.5.146 ansible_user=haudharys ansible_ssh_pass=YOUR_PASSWORD
