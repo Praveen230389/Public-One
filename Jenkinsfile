@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git credentialsId: 'github-pat', url: 'https://github.com/Praveen230389/Public-One.git'
+        git branch: 'main' credentialsId: 'github-pat', url: 'https://github.com/Praveen230389/Public-One.git'
       }
     }
 
