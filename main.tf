@@ -34,10 +34,3 @@ resource "aws_security_group" "web_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
-resource "aws_instance" "web" {
-  ami           = "ami-0c02fb55956c7d316"
-  instance_type = "t2.micro"
-  key_name      = "YOUR_KEY_PAIR_NAME"
-  vpc_security_group_ids = [aws_security_group.web_sg.id]
-}
