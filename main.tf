@@ -109,10 +109,8 @@ resource "aws_instance" "web" {
     ]
 
     connection {
-      type        = "ssh"
-      user        = "ec2-user"              # Amazon Linux 2 default user
-      private_key = file("~/.ssh/GlobalSSHkey")
-      host        = self.public_ip
-    }
-  }
+  type        = "ssh"
+  user        = "ec2-user"
+  private_key = file("/var/lib/jenkins/.ssh/GlobalSSHkey.pem")
+  host        = self.public_ip
 }
