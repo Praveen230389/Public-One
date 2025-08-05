@@ -1,10 +1,6 @@
 pipeline {  
 
     agent any
-        
-    tools {
-        maven "maven3"
-    }
 
     environment {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
@@ -15,38 +11,17 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
-            steps {
-                sh 'mvn clean package'
-            }
-        }
-
         stage('Clone Repo') {
             steps {
-                git branch: 'main', url: 'https://github.com/Praveen230389/maven-web-app.git'
+                git branch: 'main', url: 'https://github.com/Praveen230389/Public-One.git'
             }
         }
 
         stage('Terraform Init') {
             steps {
                 sh 'terraform init'
-            }
-        }
-
-        stage('Terraform Plan') {
-            steps {
                 sh 'terraform plan'
-            }
-        }
-
-        stage('Terraform Validate') {
-            steps {
                 sh 'terraform validate'
-            }
-        }
-
-        stage('Terraform Apply') {
-            steps {
                 sh 'terraform apply -auto-approve'
             }
         }
@@ -62,12 +37,7 @@ pipeline {
                 ansiblePlaybook credentialsId: 'ansible-privatekey', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/inventory.ini', playbook: '/etc/ansible/playbook.yml', vaultTmpPath: ''
             }
         }
-        stage('test maven') {
-            steps {
-                sh 'mvn test'
-            }
-        }
-
+        
         stage('SonarQube Analysis') {
             environment {
                 SONAR_HOST_URL = 'http://54.226.59.54:9000'
