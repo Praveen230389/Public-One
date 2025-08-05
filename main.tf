@@ -2,6 +2,6 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_s3_bucket" "praveenchaudhary" {
-  bucket = "my-unique-terraform-bucket-12345" # bucket name must be globally unique
+resource "aws_s3_bucket" "my_bucket" {
+  bucket = "praveenchaudhary230389" # bucket name must be globally unique
 }
