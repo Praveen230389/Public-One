@@ -1,6 +1,6 @@
 ---
 - name: Launch Ubuntu container with htop
-  hosts: all
+  hosts: webserver
   become: true
 
   tasks:
