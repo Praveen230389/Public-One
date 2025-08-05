@@ -1,7 +1,11 @@
 pipeline {  
 
     agent any
-
+        
+    tools {
+        maven "maven3.9.11"   // Make sure this matches your Global Tool Configuration
+    }
+    
     environment {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
         AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
@@ -26,6 +30,13 @@ pipeline {
             }
         }
 
+        stage('test maven') {
+            steps {
+                sh 'mvn clean package'
+                sh 'mvn test'
+            }
+        }
+        
         stage('Docker Image Build') {
             steps {
                 sh 'docker build -t ashokit/mavenwebapp .'
