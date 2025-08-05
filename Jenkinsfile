@@ -6,7 +6,7 @@ pipeline {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
         AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
         AWS_DEFAULT_REGION    = 'us-east-1'
-        JENKINS_SERVER_IP     = "54.226.59.54"
+        DOCKER_SERVER_IP     = "3.90.7.228"
         REMOTE_USER           = "ubuntu"
     }
 
@@ -40,7 +40,7 @@ pipeline {
         
         stage('SonarQube Analysis') {
             environment {
-                SONAR_HOST_URL = 'http://54.226.59.54:9000'
+                SONAR_HOST_URL = 'http://3.90.67.196:9000'
                 SONAR_AUTH_TOKEN = credentials('SonarQubetoken')
             }
             steps {
@@ -49,7 +49,7 @@ pipeline {
         }
         stage('k8s deployment') {
             steps {
-                sh 'kubectl apply -f k8s-deploy.yml'
+                sh 'kubectl apply -f k8s-deploy.yaml'
             }
         }
     }
