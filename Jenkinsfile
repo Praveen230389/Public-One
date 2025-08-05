@@ -51,7 +51,12 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'sonar-scanner -Dsonar.projectKey=sample_project -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN'
+                    sh '''
+                    sonar-scanner \
+                      -Dsonar.sources=. \
+                      -Dsonar.host.url=$SONAR_HOST_URL \
+                      -Dsonar.login=$SONAR_AUTH_TOKEN
+                    '''
                 }
             }
         }
