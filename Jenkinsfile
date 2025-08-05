@@ -1,6 +1,10 @@
 pipeline {  
 
     agent any
+
+    tools {
+        sonarQubeScanner 'sonar-scanner'
+    }
     
     environment {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
