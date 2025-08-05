@@ -1,8 +1,7 @@
-resource "aws_instance" "public_instance" {
- ami           = var.ami
- instance_type = var.instance_type
+provider "aws" {
+  region = "us-east-1"
+}
 
- tags = {
-   Name = var.name_tag,
- }
+resource "aws_s3_bucket" "praveenkubernetesbucket" {
+  bucket = "my-unique-terraform-bucket-12345" # bucket name must be globally unique
 }
