@@ -1,51 +1,85 @@
-pipeline {
-    agent any
+pipeline {  
 
-    parameters {
-        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
-        choice(name: 'action', choices: ['apply', 'destroy'], description: 'Select the action to perform')
+    agent any
+        
+    tools {
+        maven "maven3"
     }
 
     environment {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
         AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
         AWS_DEFAULT_REGION    = 'us-east-1'
+        JENKINS_SERVER_IP     = "54.226.59.54"
+        REMOTE_USER           = "ubuntu"
     }
 
     stages {
-        stage('Checkout') {
+        stage('Build') {
             steps {
-                git branch: 'main', url: 'https://github.com/Praveen230389/Public-One.git'
+                sh 'mvn clean package'
             }
         }
-        stage('Terraform init') {
-            steps {
-                sh 'terraform init -upgrade'
-            }
-        }
-        stage('Plan') {
-            steps {
-                sh 'terraform plan -out tfplan'
-                sh 'terraform show -no-color tfplan > tfplan.txt'
-            }
-        }
-        stage('Apply / Destroy') {
-            steps {
-                script {
-                    if (params.action == 'apply') {
-                        if (!params.autoApprove) {
-                            def plan = readFile 'tfplan.txt'
-                            input message: "Do you want to apply the plan?",
-                            parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
-                        }
 
-                        sh "terraform ${params.action} -input=false tfplan"
-                    } else if (params.action == 'destroy') {
-                        sh "terraform ${params.action} --auto-approve"
-                    } else {
-                        error "Invalid action selected. Please choose either 'apply' or 'destroy'."
-                    }
-                }
+        stage('Clone Repo') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Praveen230389/maven-web-app.git'
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan'
+            }
+        }
+
+        stage('Terraform Validate') {
+            steps {
+                sh 'terraform validate'
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                sh 'terraform apply -auto-approve'
+            }
+        }
+
+        stage('Docker Image Build') {
+            steps {
+                sh 'docker build -t ashokit/mavenwebapp .'
+            }
+        }
+
+        stage('Execute playbook') {
+            steps {
+                ansiblePlaybook credentialsId: 'ansible-privatekey', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/inventory.ini', playbook: '/etc/ansible/playbook.yml', vaultTmpPath: ''
+            }
+        }
+        stage('test maven') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            environment {
+                SONAR_HOST_URL = 'http://54.226.59.54:9000'
+                SONAR_AUTH_TOKEN = credentials('SonarQubetoken')
+            }
+            steps {
+                sh 'mvn sonar:sonar -Dsonar.projectKey=sample_project -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN'
+            }
+        }
+        stage('k8s deployment') {
+            steps {
+                sh 'kubectl apply -f k8s-deploy.yml'
             }
         }
     }
