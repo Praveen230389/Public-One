@@ -1,10 +1,6 @@
 pipeline {  
 
     agent any
-
-    tools {
-        hudson.plugins.sonar.SonarRunnerInstallation 'SonarQube-scanner'
-    }
     
     environment {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
@@ -48,7 +44,8 @@ pipeline {
                 SONAR_AUTH_TOKEN = credentials('SonarQubetoken')
             }
             steps {
-                sh 'sonar-scanner -Dsonar.projectKey=sample_project -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN'
+                script {
+                    'sonar-scanner -Dsonar.projectKey=sample_project -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN'
             }
         }
         stage('k8s deployment') {
