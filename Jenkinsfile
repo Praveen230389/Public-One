@@ -1,5 +1,8 @@
-pipeline {  
+pipeline {
     agent any
+    tools {
+        maven 'maven3.9.11'
+    }
     
     environment {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
@@ -24,6 +27,18 @@ pipeline {
                 sh 'terraform apply -auto-approve'
             }
         }
+
+        stage('Build') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
         
         stage('Docker Image Build') {
             steps {
@@ -46,21 +61,13 @@ pipeline {
         
         stage('SonarQube Analysis') {
             environment {
-                SONAR_HOST_URL  = 'http://3.90.67.196:9000'
-                SONAR_AUTH_TOKEN = credentials('SonarQubetoken')
+                SONAR_HOST_URL = 'http://3.90.67.196:9000' // Replace with your SonarQube URL
+                SONAR_AUTH_TOKEN = credentials('SonarQubetoken') // Store your token in Jenkins credentials
             }
             steps {
-                script {
-                    sh '''
-                    sonar-scanner \
-                      -Dsonar.sources=. \
-                      -Dsonar.host.url=$SONAR_HOST_URL \
-                      -Dsonar.login=$SONAR_AUTH_TOKEN
-                    '''
-                }
+                sh 'mvn sonar:sonar -Dsonar.projectKey=sample_project -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN'
             }
         }
-
         stage('k8s deployment') {
             steps {
                 sh 'kubectl apply -f k8s-deploy.yaml'
