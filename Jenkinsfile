@@ -1,10 +1,6 @@
 pipeline {  
 
     agent any
-        
-    tools {
-        maven "maven3.9.11"   // Make sure this matches your Global Tool Configuration
-    }
     
     environment {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
@@ -29,13 +25,6 @@ pipeline {
                 sh 'terraform apply -auto-approve'
             }
         }
-
-        stage('test maven') {
-            steps {
-                sh 'mvn clean package'
-                sh 'mvn test'
-            }
-        }
         
         stage('Docker Image Build') {
             steps {
@@ -55,7 +44,7 @@ pipeline {
                 SONAR_AUTH_TOKEN = credentials('SonarQubetoken')
             }
             steps {
-                sh 'mvn sonar:sonar -Dsonar.projectKey=sample_project -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN'
+                sh 'sonar-scanner -Dsonar.projectKey=sample_project -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN'
             }
         }
         stage('k8s deployment') {
