@@ -47,21 +47,14 @@ pipeline {
         }
 
         stage('Execute playbook') {
-            steps {
-                ansiblePlaybook(
-                    credentialsId: 'ssh',
-                    disableHostKeyChecking: true,
-                    installation: 'ansible',
-                    inventory: '/etc/ansible/hosts',
-                    playbook: '/home/ubuntu/workspace/KubernetesProject/playbook.yaml',
-                    vaultTmpPath: ''
-                )
+            script {
+                ansiblePlaybook credentialsId: 'ssh', disableHostKeyChecking: true, installation: 'ansible', inventory: '/home/ansible/hosts', playbook: '/var/lib/jenkins/workspace/playbook.yaml', vaultTmpPath: ''
             }
         }
         
         stage('SonarQube Analysis') {
             environment {
-                SONAR_HOST_URL = 'http://3.90.67.196:9000' // Replace with your SonarQube URL
+                SONAR_HOST_URL = 'http://3.83.128.229:9000' // Replace with your SonarQube URL
                 SONAR_AUTH_TOKEN = credentials('SonarQubetoken') // Store your token in Jenkins credentials
             }
             steps {
