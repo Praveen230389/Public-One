@@ -94,7 +94,7 @@ pipeline {
             
         stage('k8s deployment') {
             steps {
-                sh 'kubectl apply -f k8s-deploy.yaml'
+                sh '/usr/local/bin/kubectl apply -f k8s-deploy.yaml'
             }
         }
     }
