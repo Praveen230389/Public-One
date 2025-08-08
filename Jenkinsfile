@@ -92,12 +92,14 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
-             steps {
-                  sh '''
-                  kubectl apply -f k8s-deploy.yaml
-                  '''
-             }
+        stage('Execute k8s playbook') {
+            steps {
+                dir('ansible') {
+                    script {
+                        ansiblePlaybook credentialsId: 'ssh', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: '/home/ubuntu/workspace/Kubernetes/k8s-deploy.yaml', vaultCredentialsId: 'k8s-Sonar-server', vaultTmpPath: ''
+                    }
+                }
+            }
         }
     }
 }
