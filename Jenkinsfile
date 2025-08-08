@@ -91,16 +91,13 @@ pipeline {
                 sh "trivy image --scanners vuln --offline-scan adamtravis/democicd:latest > trivyresults.txt"
             }
         }
-            
+
         stage('Deploy to Kubernetes') {
-            steps {
-                dir('ansible') {
-                    script {
-                        ansiblePlaybook credentialsId: 'ssh', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: '/home/ubuntu/workspace/Kubernetes/k8s-deploy.yaml', vaultCredentialsId: 'k8s-Sonar-server', vaultTmpPath: ''
-                    }
-                }
-                
-            }
+             steps {
+                  sh '''
+                  kubectl apply -f k8s-deploy.yaml
+                  '''
+             }
         }
     }
 }
