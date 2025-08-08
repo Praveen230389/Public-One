@@ -92,9 +92,14 @@ pipeline {
             }
         }
             
-        stage('k8s deployment') {
+        stage('Execute k8s playbook') {
             steps {
-                ansiblePlaybook credentialsId: 'ssh', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: '/home/ubuntu/workspace/Kubernetes/k8s-deploy.yaml', vaultCredentialsId: 'k8s-Sonar-server', vaultTmpPath: ''
+                dir('ansible') {
+                    script {
+                        ansiblePlaybook credentialsId: 'ansible', disableHostKeyChecking: true, installation: 'ansible', playbook: 'docker-k8s-Jenkinsfile', vaultCredentialsId: 'k8s', vaultTmpPath: ''
+                    }
+                }
+                
             }
         }
     }
