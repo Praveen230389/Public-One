@@ -1,6 +1,6 @@
 ---
 - name: First Play - Docker Image Build
-  hosts: docker
+  hosts: webserver
   tasks:
     - name: Copy Dockerfile
       copy:
