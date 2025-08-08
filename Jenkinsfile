@@ -96,7 +96,7 @@ pipeline {
             steps {
                 dir('ansible') {
                     script {
-                        ansiblePlaybook credentialsId: 'ssh', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: '/home/ubuntu/workspace/Kubernetes/task.yml', vaultCredentialsId: 'k8s-Sonar-server', vaultTmpPath: ''
+                        ansiblePlaybook credentialsId: 'ssh', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: '/home/ubuntu/workspace/Kubernetes/k8s-deploy.yaml', vaultCredentialsId: 'k8s-Sonar-server', vaultTmpPath: ''
                     }
                 }
                 
