@@ -62,6 +62,15 @@ pipeline {
             }
         }
 
+        stage('Stage IV: SAST') {
+            steps { 
+                echo "Running Static application security testing using SonarQube Scanner ..."
+                   withSonarQubeEnv('SonarQube') {
+                       sh 'mvn sonar:sonar -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html -Dsonar.projectName=wezvatech'
+              }
+           }
+       }
+
         stage('Stage V: QualityGates') {
             steps { 
                 echo "Running Quality Gates to verify the code quality"
