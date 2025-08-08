@@ -54,13 +54,35 @@ pipeline {
         
         stage('SonarQube Analysis') {
             environment {
-                SONAR_HOST_URL = 'http://44.205.246.11:9000' // Replace with your SonarQube URL
-                SONAR_AUTH_TOKEN = credentials('SonarQubetoken') // Store your token in Jenkins credentials
+                SONAR_HOST_URL = 'http://44.205.246.11:9000'
+                SONAR_AUTH_TOKEN = credentials('SonarQubetoken')
             }
             steps {
                 sh 'mvn sonar:sonar -Dsonar.projectKey=sample_project -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN'
             }
         }
+
+        stage('Stage V: QualityGates') {
+            steps { 
+                echo "Running Quality Gates to verify the code quality"
+                script {
+                    timeout(time: 1, unit: 'MINUTES') {
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('trivy scan') {
+            steps { 
+                echo "Scanning Image for Vulnerabilities"
+                sh "trivy image --scanners vuln --offline-scan adamtravis/democicd:latest > trivyresults.txt"
+            }
+        }
+            
         stage('k8s deployment') {
             steps {
                 sh 'kubectl apply -f k8s-deploy.yaml'
