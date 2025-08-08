@@ -8,7 +8,7 @@ pipeline {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
         AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
         AWS_DEFAULT_REGION    = 'us-east-1'
-        DOCKER_SERVER_IP      = "3.90.7.228"
+        DOCKER_SERVER_IP      = "44.202.143.20"
         REMOTE_USER           = "ubuntu"
     }
 
@@ -54,7 +54,7 @@ pipeline {
         
         stage('SonarQube Analysis') {
             environment {
-                SONAR_HOST_URL = 'http://3.83.128.229:9000' // Replace with your SonarQube URL
+                SONAR_HOST_URL = 'http://44.205.246.11:9000' // Replace with your SonarQube URL
                 SONAR_AUTH_TOKEN = credentials('SonarQubetoken') // Store your token in Jenkins credentials
             }
             steps {
