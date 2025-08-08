@@ -48,7 +48,7 @@ pipeline {
 
         stage('Execute playbook') {
             steps {
-                ansiblePlaybook credentialsId: 'ssh', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: '/home/ubuntu/workspace/Kubernetes/playbook.yaml', vaultTmpPath: ''
+                ansiblePlaybook credentialsId: 'ssh', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/inventory.ini', playbook: '/home/ubuntu/workspace/Kubernetes/playbook.yaml', vaultTmpPath: ''
             }
         }
         
