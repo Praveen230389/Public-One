@@ -47,7 +47,7 @@ pipeline {
         }
 
         stage('Execute playbook') {
-            script {
+            steps {
                 ansiblePlaybook credentialsId: 'ssh', disableHostKeyChecking: true, installation: 'ansible', inventory: '/home/ansible/hosts', playbook: '/var/lib/jenkins/workspace/playbook.yaml', vaultTmpPath: ''
             }
         }
