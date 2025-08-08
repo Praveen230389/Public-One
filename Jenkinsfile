@@ -94,7 +94,7 @@ pipeline {
             
         stage('k8s deployment') {
             steps {
-                sh 'ssh ubuntu@44.205.246.11 /usr/local/bin/kubectl apply -f k8s-deploy.yaml'
+                sh 'kubectl apply -f k8s-deploy.yaml'
             }
         }
     }
