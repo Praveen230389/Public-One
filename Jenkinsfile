@@ -92,7 +92,7 @@ pipeline {
             }
         }
             
-        stage('Execute k8s playbook') {
+        stage('Deploy to Kubernetes') {
             steps {
                 dir('ansible') {
                     script {
